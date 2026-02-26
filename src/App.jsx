@@ -5,11 +5,14 @@ import Projects from "./pages/projects";
 import About from "./pages/about";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import NotFound from "./pages/notFound";
 
 function App() {
   const location = useLocation();
   const container = useRef(null);
   const comp = useRef(null);
+  const validRoutes = ["/", "/projects", "/about"];
+  const hideIntro = !validRoutes.includes(location.pathname);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -51,19 +54,22 @@ function App() {
 
   return (
     <div className="relative" ref={comp}>
-      <div
-        id="intro-slider"
-        className="h-screen p-8 bg-txtPrimary text-bgPrimary absolute top-0 left-0 font-CabinetGrotesk z-10 w-full flex justify-center items-center tracking-tight"
-      >
-        <h1 id="title" className="text-[14cqw]">
-          Hi There!
-        </h1>
-      </div>
+      {!hideIntro && (
+        <div
+          id="intro-slider"
+          className="h-screen p-8 bg-txtPrimary text-bgPrimary absolute top-0 left-0 font-CabinetGrotesk z-10 w-full flex justify-center items-center tracking-tight"
+        >
+          <h1 id="title" className="text-[14cqw]">
+            Hi There!
+          </h1>
+        </div>
+      )}
       <div id="page" ref={container}>
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="/about" element={<About />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>
